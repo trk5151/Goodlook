@@ -1,0 +1,72 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Camera } from "lucide-react";
+
+export default function GoodLookApp() {
+  const [step, setStep] = useState("start");
+  const [occasion, setOccasion] = useState("");
+
+  return (
+    <div className="min-h-screen bg-white text-black flex flex-col items-center justify-center p-4">
+      <h1 className="text-3xl font-bold mb-4">GoodLook</h1>
+
+      {step === "start" && (
+        <>
+          <p className="mb-6 text-center">Scanne ein Kleidungsstück, um ein Outfit zu erstellen.</p>
+          <Button className="mb-4" onClick={() => setStep("scan")}> 
+            <Camera className="mr-2" /> Kleidung scannen
+          </Button>
+        </>
+      )}
+
+      {step === "scan" && (
+        <>
+          <Card className="w-full max-w-md mb-6">
+            <CardContent className="flex flex-col items-center p-6">
+              <div className="w-48 h-48 bg-gray-100 flex items-center justify-center rounded-xl mb-4">
+                <Camera className="w-12 h-12 text-gray-400" />
+              </div>
+              <Button onClick={() => setStep("occasion")}>Outfit erstellen</Button>
+            </CardContent>
+          </Card>
+        </>
+      )}
+
+      {step === "occasion" && (
+        <>
+          <p className="mb-4">Für welchen Anlass brauchst du ein Outfit?</p>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            {["Alltag", "Business", "Date", "Party"].map((label) => (
+              <Button 
+                key={label} 
+                variant={occasion === label ? "default" : "outline"} 
+                onClick={() => setOccasion(label)}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
+          {occasion && (
+            <Button onClick={() => setStep("generated")}>Outfit anzeigen</Button>
+          )}
+        </>
+      )}
+
+      {step === "generated" && (
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Vorgeschlagenes Outfit ({occasion})</h2>
+            <ul className="space-y-2">
+              <li>👕 Oberteil: Weißes Hemd</li>
+              <li>👖 Hose: Dunkelblaue Jeans</li>
+              <li>👟 Schuhe: Weiße Sneaker</li>
+              <li>🕶️ Accessoire: Schwarze Sonnenbrille</li>
+            </ul>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
